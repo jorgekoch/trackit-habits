@@ -2,14 +2,13 @@ import React from 'react';
 import styled from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import Header from "./Header";
+
 
 export default function Hoje() {
     return (
         <Body>
-            <Head>
-                <h1>TrackIt</h1>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Cathartes_aura_-Florida_-USA_-upper_body-8.jpg/220px-Cathartes_aura_-Florida_-USA_-upper_body-8.jpg" alt="photo" />
-            </Head>
+            <Header />
             <Titles>
                 <h1>DATA</h1>
             </Titles>
@@ -32,6 +31,7 @@ const Body = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100vh;
+    background-color: #f2f2f2;
 `
 
 const Head = styled.div`

@@ -1,19 +1,61 @@
 import React from 'react';
 import styled from "styled-components";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import logo from "../images/Trackit logo.png";
+import axios from "axios";
+import BouncingDotsLoader from "./BouncingDotsLoader";
+
 
 export default function Home () {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    function logIn(e) {
+        e.preventDefault();
+        setLoading(true);
+        setDisabled(true);
+        const user = { email, password }; 
+        const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', user);
+        promise.then(() => {
+            navigate('/habitos');
+            setLoading(false);
+            setDisabled(false);
+        });
+        promise.catch(err => {
+            console.log(err.response.data)
+            alert("Erro ao fazer login!");
+            setLoading(false);
+            setDisabled(false);
+        });
+    }
+
     return (
         <Body>
         <img src={logo} alt="TrackIt Logo" />
-            <Form>
-                <input type="email" placeholder="email" required />
-                <input type="password" placeholder="senha" required />
-                <button type="submit">Entrar</button>
+            <Form onSubmit={logIn}>
+                <input 
+                    type="email" 
+                    placeholder="email" 
+                    required 
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    disabled={disabled}/>
+                <input 
+                    type="password" 
+                    placeholder="senha" 
+                    required 
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    disabled={disabled}/>
+                <button type="submit" disabled={disabled}>
+                    {loading ? <BouncingDotsLoader /> : "Entrar"}
+                </button>
             </Form>
-            <Tosignup>Não tem uma conta? Cadastre-se!</Tosignup>
+            <Tosignup onClick={() => navigate('/signup')} >Não tem uma conta? Cadastre-se!</Tosignup>
         </Body>
     );
 }
@@ -30,6 +72,17 @@ const Body = styled.div`
         width: 180px;
         height: 178px;
     }
+    input:disabled {
+    border: 1px solid #D4D4D4;
+    background-color: #f2f2f2;
+    color: #AFAFAF; 
+    cursor: not-allowed;
+    }
+    button:disabled {
+        background-color: #86ccff;
+        cursor: not-allowed;
+    }
+
 `
 
 const Form = styled.form`
