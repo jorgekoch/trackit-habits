@@ -1,27 +1,77 @@
 import { useState } from "react"
 import styled from "styled-components"
+import axios from "axios"
 
 export default function Habit() {
-    const [selected, setSelected] = useState(false);
+    const [diasSelecionados, setDiasSelecionados] = useState([]);
+    const [nomeHabito, setNomeHabito] = useState("");
+    const [novoHabito, setNovoHabito] = useState({
+        name: nomeHabito,
+        days: diasSelecionados
+    });
+
+    function criarHabito() {
+        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+        const promise = axios.post(url, novoHabito, config);
+        promise.then(() => console.log("ok"));
+        promise.catch(() => console.log("erro"));
+    }
+
+    const dias = [
+        { id: 0, nome: "D" },
+        { id: 1, nome: "S" },
+        { id: 2, nome: "T" },
+        { id: 3, nome: "Q" },
+        { id: 4, nome: "Q" },
+        { id: 5, nome: "S" },
+        { id: 6, nome: "S" }
+    ]
+     
+    function selecionarDia(id) {
+        if (diasSelecionados.includes(id)) {
+            setDiasSelecionados(diasSelecionados.filter(dia => dia !== id));
+        } else {
+            setDiasSelecionados([...diasSelecionados, id]);
+        }
+    }
 
     return (
         <HabitContainer>
             <HabitName
                 type="text" 
                 placeholder="nome do hábito" 
+                value={nomeHabito}
+                onChange={(e) => {
+                    setNomeHabito(e.target.value);
+                    setNovoHabito({ name: nomeHabito, days: diasSelecionados });
+                }}
+                disabled={false}
                 required />
             <HabitDays>
-                <Day onClick={() => setSelected(!selected)}>D</Day>
-                <Day onClick={() => setSelected(!selected)}>S</Day>
-                <Day onClick={() => setSelected(!selected)}>T</Day>
-                <Day onClick={() => setSelected(!selected)}>Q</Day>
-                <Day onClick={() => setSelected(!selected)}>Q</Day>
-                <Day onClick={() => setSelected(!selected)}>S</Day>
-                <Day onClick={() => setSelected(!selected)}>S</Day>
+            {dias.map((dia) => (
+                <Day 
+                    key={dia.id} 
+                    selected={diasSelecionados.includes(dia.id)} 
+                    onClick={() => {
+                        selecionarDia(dia.id);
+                        setNovoHabito({ name: nomeHabito, days: diasSelecionados.includes(dia.id) 
+                            ? diasSelecionados.filter(d => d !== dia.id) 
+                            : [...diasSelecionados, dia.id] });
+                    }}
+                >
+                    {dia.nome}
+                </Day>
+            ))}
             </HabitDays>
             <Buttons>
-                <CancelButton>Cancelar</CancelButton>
-                <SaveButton>Salvar</SaveButton>
+                <CancelButton onClick={() => {
+                    setNomeHabito(""); 
+                    setDiasSelecionados([]);
+                    setNovoHabito({ name: "", days: [] });
+                }}
+                >Cancelar
+                </CancelButton>
+                <SaveButton onClick={criarHabito}>Salvar</SaveButton>
             </Buttons>
         </HabitContainer>
     )
@@ -120,8 +170,3 @@ const SaveButton = styled.button`
     color: #FFFFFF;
 `
 
-// {["D", "S", "T", "Q", "Q", "S", "S"].map((day, index) => (
-//     <Day key={index} onClick={() => setSelected(!selected)}>
-//         {day}
-//     </Day>
-// ))}

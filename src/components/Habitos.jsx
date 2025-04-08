@@ -27,6 +27,7 @@ export default function Habitos() {
     )
 }
 
+
 const Body = styled.div`
     display: flex;
     flex-direction: column;
