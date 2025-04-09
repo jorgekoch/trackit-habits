@@ -1,81 +1,55 @@
-import { useState } from "react"
-import styled from "styled-components"
-import axios from "axios"
+import styled from "styled-components";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
-export default function Habit() {
-    const [diasSelecionados, setDiasSelecionados] = useState([]);
-    const [nomeHabito, setNomeHabito] = useState("");
-    const [novoHabito, setNovoHabito] = useState({
-        name: nomeHabito,
-        days: diasSelecionados
-    });
+export default function Habit () {
+    const [habits, setHabits] = useState([]);
+ 
 
-    function criarHabito() {
-        const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
-        const promise = axios.post(url, novoHabito, config);
-        promise.then(() => console.log("ok"));
-        promise.catch(() => console.log("erro"));
-    }
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
 
-    const dias = [
-        { id: 0, nome: "D" },
-        { id: 1, nome: "S" },
-        { id: 2, nome: "T" },
-        { id: 3, nome: "Q" },
-        { id: 4, nome: "Q" },
-        { id: 5, nome: "S" },
-        { id: 6, nome: "S" }
-    ]
-     
-    function selecionarDia(id) {
-        if (diasSelecionados.includes(id)) {
-            setDiasSelecionados(diasSelecionados.filter(dia => dia !== id));
-        } else {
-            setDiasSelecionados([...diasSelecionados, id]);
-        }
-    }
+        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+        .then(response => {
+            setHabits(response.data);
+        })
+        .catch(error => console.log(error.response.data));
+    }, []);
+
 
     return (
         <HabitContainer>
-            <HabitName
-                type="text" 
-                placeholder="nome do hábito" 
-                value={nomeHabito}
-                onChange={(e) => {
-                    setNomeHabito(e.target.value);
-                    setNovoHabito({ name: nomeHabito, days: diasSelecionados });
-                }}
-                disabled={false}
-                required />
-            <HabitDays>
-            {dias.map((dia) => (
-                <Day 
-                    key={dia.id} 
-                    selected={diasSelecionados.includes(dia.id)} 
-                    onClick={() => {
-                        selecionarDia(dia.id);
-                        setNovoHabito({ name: nomeHabito, days: diasSelecionados.includes(dia.id) 
-                            ? diasSelecionados.filter(d => d !== dia.id) 
-                            : [...diasSelecionados, dia.id] });
-                    }}
-                >
-                    {dia.nome}
-                </Day>
-            ))}
-            </HabitDays>
-            <Buttons>
-                <CancelButton onClick={() => {
-                    setNomeHabito(""); 
-                    setDiasSelecionados([]);
-                    setNovoHabito({ name: "", days: [] });
-                }}
-                >Cancelar
-                </CancelButton>
-                <SaveButton onClick={criarHabito}>Salvar</SaveButton>
-            </Buttons>
-        </HabitContainer>
+        <HabitName
+            type="text" 
+            placeholder="nome do hábito"
+            value={habits.name}
+            />
+        <HabitDays>
+            <Day>
+            </Day>
+        </HabitDays>
+    </HabitContainer>
     )
 }
+
+// [
+// 	{
+// 		id: 1,
+// 		name: "Nome do hábito",
+// 		days: [1, 3, 5]
+// 	},
+// 	{
+// 		id: 2,
+// 		name: "Nome do hábito 2",
+// 		days: [1, 3, 4, 6]
+// 	}
+// ]
 
 const HabitContainer = styled.div`
     display: flex;
@@ -129,44 +103,3 @@ const Day = styled.div`
     color: ${({ selected }) => (selected ? "#FFFFFF" : "#DBDBDB")}; // Cor do texto
     cursor: pointer;
 `
-
-const Buttons = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 23px;
-    bottom: 16px;
-    right: 16px;
-    width: 100%;
-    height: 35px;
-    position: absolute;
-`
-
-const CancelButton = styled.button`
-    width: 84px;
-    height: 35px;
-    background-color: #FFFFFF;
-    border-radius: 4.64px;
-    border: none;
-    font-family: Lexend Deca;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0%;
-    color: #52B6FF;
-`
-const SaveButton = styled.button`
-    width: 84px;
-    height: 35px;
-    background-color: #52B6FF;
-    border-radius: 4.64px;
-    border: none;
-    font-family: Lexend Deca;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0%;
-    color: #FFFFFF;
-`
-

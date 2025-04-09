@@ -5,7 +5,7 @@ import { useState } from "react";
 import Header from "./Header";
 
 
-export default function Hoje() {
+export default function Today() {
     return (
         <Body>
             <Header />

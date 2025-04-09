@@ -18,9 +18,17 @@ export default function Home () {
         e.preventDefault();
         setLoading(true);
         setDisabled(true);
+        if (email === "" || password === "") {
+            alert("Preencha todos os campos!");
+            setLoading(false);
+            setDisabled(false);
+            return;
+        }
+
         const user = { email, password }; 
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', user);
-        promise.then(() => {
+        promise.then((response) => {
+            localStorage.setItem("token", response.data.token);
             navigate('/habitos');
             setLoading(false);
             setDisabled(false);

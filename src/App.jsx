@@ -1,7 +1,7 @@
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import Habitos from "./components/Habitos";
-import Hoje from "./components/Hoje";
+import Today from "./components/Today";
 import styled from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
@@ -15,7 +15,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/habitos" element={<Habitos />} />
-          <Route path="/hoje" element={<Hoje />} />
+          <Route path="/hoje" element={<Today />} />
         </Routes>
       </BrowserRouter>
     </>

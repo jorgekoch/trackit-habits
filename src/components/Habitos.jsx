@@ -4,22 +4,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import NewHabit from "./NewHabit";
 import Habit from "./Habit";
 
 export default function Habitos() {
     const [showForm, setShowForm] = useState(false);
-
+    
     return (
         <Body>
             <Header />
             <Titles>
                 <h1>Meus Hábitos</h1>
-                <button onClick={() => setShowForm(!showForm)}>
+                <button onClick={() => setShowForm(true)}>
                     <h1>+</h1>
                 </button>
             </Titles>
             <MyHabits>
-                {showForm ? <Habit /> : ""}
+               <NewHabit showForm={showForm} setShowForm={setShowForm}/>
+                <Habit />
                 <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>
             </MyHabits>
             <Footer />
