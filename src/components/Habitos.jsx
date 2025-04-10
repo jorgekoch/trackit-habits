@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
+import axios from 'axios';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import NewHabit from "./NewHabit";
@@ -9,6 +10,22 @@ import Habit from "./Habit";
 
 export default function Habitos() {
     const [showForm, setShowForm] = useState(false);
+    const [habits, setHabits] = useState([]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+        .then(response => setHabits(response.data))
+        .catch(error => console.log(error.response.data));
+    }, []);
+
+    console.log(habits);
     
     return (
         <Body>
@@ -20,9 +37,11 @@ export default function Habitos() {
                 </button>
             </Titles>
             <MyHabits>
-               <NewHabit showForm={showForm} setShowForm={setShowForm}/>
-                <Habit />
-                <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>
+                <NewHabit showForm={showForm} setShowForm={setShowForm}/>
+                {habits.map((habit) => (
+                    <Habit key={habit.id} habit={habit} />
+                ))}
+                {habits.length > 0 ? "" : <h1>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h1>}
             </MyHabits>
             <Footer />
         </Body>

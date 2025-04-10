@@ -3,59 +3,33 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function Habit () {
-    const [habits, setHabits] = useState([]);
- 
+export default function Habit ({habit}) {
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
+    const [selectedDays, setSelectedDays] = useState(habit.days);
+    const [habitName, setHabitName] = useState(habit.name);
 
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
-        .then(response => {
-            setHabits(response.data);
-        })
-        .catch(error => console.log(error.response.data));
-    }, []);
-
-
+    console.log(habit.name);
     return (
-        <HabitContainer>
-        <HabitName
-            type="text" 
-            placeholder="nome do hábito"
-            value={habits.name}
-            />
+    <HabitContainer>
+        <HabitName>{habit.name}</HabitName>
         <HabitDays>
-            <Day>
-            </Day>
+            {habit.days.map((day, index) => (
+                <Day key={index} selected={selectedDays.includes(day)}>
+                    {day}
+                </Day>
+            ))} 
         </HabitDays>
     </HabitContainer>
     )
 }
 
-// [
-// 	{
-// 		id: 1,
-// 		name: "Nome do hábito",
-// 		days: [1, 3, 5]
-// 	},
-// 	{
-// 		id: 2,
-// 		name: "Nome do hábito 2",
-// 		days: [1, 3, 4, 6]
-// 	}
-// ]
 
 const HabitContainer = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 340px;
-    height: 180px;
+    height: 91px;
     background-color: #FFFFFF;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -64,18 +38,20 @@ const HabitContainer = styled.div`
     position: relative;
 `
 
-const HabitName = styled.input`
-    width: 303px;
-    height: 45px;
-    justify-content: center;
+const HabitName = styled.div`
+    display: flex;
     align-items: center;
-    background-color: #FFFFFF;
-    border-radius: 5px;
-    border: 1px solid #D5D5D5;
-    padding: 10px;
+    justify-content: center;
     box-sizing: border-box;
     margin-bottom: 8px;
-`
+    font-family: Lexend Deca;
+    font-weight: 400;
+    font-size: 19.98px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: #666666;
+`;
+
 const HabitDays = styled.div`
     display: flex;
     flex-direction: row;

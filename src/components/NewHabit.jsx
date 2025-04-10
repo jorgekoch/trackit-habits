@@ -75,12 +75,8 @@ export default function NewHabit({ showForm, setShowForm }) {
             ))}
             </HabitDays>
             <Buttons>
-                <CancelButton onClick={() => {
-                    setNomeHabito(""); 
-                    setDiasSelecionados([]);
-                    setShowForm(false);
-                }}
-                >Cancelar
+                <CancelButton onClick={() => setShowForm(false)}>
+                    Cancelar
                 </CancelButton>
                 <SaveButton onClick={criarHabito}>Salvar</SaveButton>
             </Buttons>
