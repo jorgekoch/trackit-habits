@@ -1,21 +1,28 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useEffect } from "react";
-import axios from "axios";
+
 
 export default function Habit ({habit}) {
 
-    const [selectedDays, setSelectedDays] = useState(habit.days);
-    const [habitName, setHabitName] = useState(habit.name);
+    const dias = [
+        { id: 0, nome: "D" },
+        { id: 1, nome: "S" },
+        { id: 2, nome: "T" },
+        { id: 3, nome: "Q" },
+        { id: 4, nome: "Q" },
+        { id: 5, nome: "S" },
+        { id: 6, nome: "S" }
+    ]
 
-    console.log(habit.name);
+    const [selectedDays, setSelectedDays] = useState(habit.days);
+
     return (
     <HabitContainer>
         <HabitName>{habit.name}</HabitName>
         <HabitDays>
-            {habit.days.map((day, index) => (
-                <Day key={index} selected={selectedDays.includes(day)}>
-                    {day}
+            {dias.map((day) => (
+                <Day key={day.id} selected={selectedDays.includes(day.id)}>
+                    {day.nome}
                 </Day>
             ))} 
         </HabitDays>
@@ -27,7 +34,7 @@ export default function Habit ({habit}) {
 const HabitContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     width: 340px;
     height: 91px;
     background-color: #FFFFFF;
@@ -35,13 +42,12 @@ const HabitContainer = styled.div`
     margin-bottom: 10px;
     padding: 16px;
     box-sizing: border-box;
-    position: relative;
 `
 
 const HabitName = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     box-sizing: border-box;
     margin-bottom: 8px;
     font-family: Lexend Deca;

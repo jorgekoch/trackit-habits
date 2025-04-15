@@ -24,8 +24,6 @@ export default function Habitos() {
         .then(response => setHabits(response.data))
         .catch(error => console.log(error.response.data));
     }, []);
-
-    console.log(habits);
     
     return (
         <Body>
@@ -100,5 +98,6 @@ const MyHabits = styled.div`
     color: #666666;
     padding: 10px;
     box-sizing: border-box;
+    padding-bottom: 65px;
 `
 
