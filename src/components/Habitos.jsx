@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import axios from 'axios';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -11,9 +11,14 @@ import Habit from "./Habit";
 export default function Habitos() {
     const [showForm, setShowForm] = useState(false);
     const [habits, setHabits] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/");
+        }
+        
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

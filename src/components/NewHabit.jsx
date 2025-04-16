@@ -28,6 +28,8 @@ export default function NewHabit({ showForm, setShowForm }) {
         promise.then(() => console.log("ok"));
         promise.catch(() => console.log("erro"));
         setShowForm(false);
+        setDiasSelecionados([]);
+        setNomeHabito("");
     }
 
     const dias = [

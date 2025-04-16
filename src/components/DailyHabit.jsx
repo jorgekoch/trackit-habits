@@ -4,15 +4,7 @@ import { useState, useEffect } from "react";
 
 
 export default function DailyHabit ({habit}) {    
-    const [selected, setSelected] = useState(false);
-    const [currentSequence, setCurrentSequence] = useState(0);
-    const [highestSequence, setHighestSequence] = useState(0);
-
-    useEffect(() => {
-        setSelected(habit.done); 
-        setCurrentSequence(habit.currentSequence);
-        setHighestSequence(habit.highestSequence);
-    }, [habit]); 
+    const [selected, setSelected] = useState(habit.done);
 
     function habitCheck() {
         const token = localStorage.getItem("token");
@@ -23,24 +15,9 @@ export default function DailyHabit ({habit}) {
             }
         };
         
-        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`;
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/${selected ? "uncheck" : "check"}`;
         const promise = axios.post(url, {}, config);
-        promise.then(() => setSelected(true));
-        promise.catch((error) => console.log(error.response.data));
-    }
-
-    function habitUncheck() {
-        const token = localStorage.getItem("token");
-
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
-        
-        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`;
-        const promise = axios.post(url, {}, config);
-        promise.then(() => setSelected(false));
+        promise.then(() => setSelected(!selected));
         promise.catch((error) => console.log(error.response.data));
     }
 
@@ -49,20 +26,21 @@ export default function DailyHabit ({habit}) {
         <div>
         <HabitName>{habit.name}</HabitName>
         <HabitStats>
-            Sequência atual: {currentSequence} dias
+            Sequência atual: {habit.currentSequence} dias
             <br/>
-            Seu recorde: {highestSequence} dias
+            Seu recorde: {habit.highestSequence} dias
             <br/>
         </HabitStats>
         </div>
         <HabitCheck 
-            onClick={selected ? habitUncheck : habitCheck}
+            onClick={habitCheck}
             selected={selected}>
             <ion-icon name="checkmark-outline"></ion-icon>
         </HabitCheck>
     </HabitContainer>
     )
 }
+
 
 const HabitCheck = styled.div`
     display: flex;

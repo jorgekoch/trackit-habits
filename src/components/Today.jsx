@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Header";
@@ -11,7 +11,7 @@ import DailyHabit from "./DailyHabit";
 export default function Today() {
 
     const [habits, setHabits] = useState([]);
-    
+    const navigate = useNavigate();
     const date = new Date();
     const weekday = date.getDay();
     const weekdays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
@@ -21,6 +21,9 @@ export default function Today() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/");
+        }
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -54,7 +57,7 @@ export default function Today() {
 const Body = styled.div`
     display: flex;
     flex-direction: column;
-    width: 100%;
+    min-width: 100%;
     min-height: 100vh;
     background-color: #f2f2f2;
 `
