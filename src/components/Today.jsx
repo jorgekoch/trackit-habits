@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Header";
-import Footer from "./Footer";
+import FooterToday from "./FooterToday";
 import DailyHabit from "./DailyHabit";
 
 
@@ -46,7 +46,7 @@ export default function Today() {
                     />
                 ))}
             </MyHabits>
-            <Footer />
+            <FooterToday />
         </Body>
     )
 }
@@ -55,7 +55,7 @@ const Body = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f2f2f2;
 `
 

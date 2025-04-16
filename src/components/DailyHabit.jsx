@@ -1,21 +1,63 @@
 import styled from "styled-components";
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 
 export default function DailyHabit ({habit}) {    
+    const [selected, setSelected] = useState(false);
+    const [currentSequence, setCurrentSequence] = useState(0);
+    const [highestSequence, setHighestSequence] = useState(0);
+
+    useEffect(() => {
+        setSelected(habit.done); 
+        setCurrentSequence(habit.currentSequence);
+        setHighestSequence(habit.highestSequence);
+    }, [habit]); 
+
+    function habitCheck() {
+        const token = localStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`;
+        const promise = axios.post(url, {}, config);
+        promise.then(() => setSelected(true));
+        promise.catch((error) => console.log(error.response.data));
+    }
+
+    function habitUncheck() {
+        const token = localStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        
+        const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`;
+        const promise = axios.post(url, {}, config);
+        promise.then(() => setSelected(false));
+        promise.catch((error) => console.log(error.response.data));
+    }
 
     return (
     <HabitContainer>
         <div>
         <HabitName>{habit.name}</HabitName>
         <HabitStats>
-            Sequência atual: {habit.currentSequence} dias
+            Sequência atual: {currentSequence} dias
             <br/>
-            Seu recorde: {habit.highestSequence} dias
+            Seu recorde: {highestSequence} dias
             <br/>
         </HabitStats>
         </div>
-        <HabitCheck>
+        <HabitCheck 
+            onClick={selected ? habitUncheck : habitCheck}
+            selected={selected}>
             <ion-icon name="checkmark-outline"></ion-icon>
         </HabitCheck>
     </HabitContainer>
@@ -31,7 +73,7 @@ const HabitCheck = styled.div`
     height: 69px;
     border-radius: 5px;
     border: 1px solid #E7E7E7;
-    background-color: #EBEBEB;
+    background-color: ${({ selected }) => (selected ? "#8FC549" : "#EBEBEB")} ;
     ion-icon {
         width: 35px;
         height: 28px;

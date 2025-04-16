@@ -1,19 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Footer() {
+export default function FooterToday() {
     const navigate = useNavigate();
 
     function handleClick() {
-        navigate("/hoje");
+        navigate("/habitos");
     }
-
     return (
         <FooterContainer>
-            <HabitsList>
+            <HabitsList onClick={handleClick}>
                 <h1>Hábitos</h1>
             </HabitsList>
-            <TodayList onClick={handleClick}>
+            <TodayList>
                 <h1>Hoje</h1>
             </TodayList>
         </FooterContainer>
@@ -31,7 +30,7 @@ const FooterContainer = styled.div`
     bottom: 0;
 `
 
-const HabitsList = styled.div`
+const TodayList = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,7 +48,7 @@ const HabitsList = styled.div`
     }
 `
 
-const TodayList = styled.div`
+const HabitsList = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
