@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import logo from "../images/Trackit logo.png";
 import axios from "axios";
 import BouncingDotsLoader from "./BouncingDotsLoader";
+import UserContext from '../context/UserContext';
 
 
 export default function Home () {
@@ -12,7 +13,8 @@ export default function Home () {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); 
+    const [user, setUser] = useState(UserContext);
 
     function logIn(e) {
         e.preventDefault();
@@ -24,7 +26,8 @@ export default function Home () {
             setDisabled(false);
             return;
         }
-
+        
+        
         const user = { email, password }; 
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', user);
         promise.then((response) => {

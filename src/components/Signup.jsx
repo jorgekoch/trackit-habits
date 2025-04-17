@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import logo from "../images/Trackit logo.png";
 import axios from "axios";
 import BouncingDotsLoader from "./BouncingDotsLoader";
-
+import UserContext from "../context/UserContext";
+import { useContext } from "react";
 
 export default function Signup () {
+    const [user, setUser] = useContext(UserContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,14 +20,19 @@ export default function Signup () {
 
     function createUser(e) {
         e.preventDefault();
+        if (email === "" || password === "" || name === "" || image === "") {
+            alert("Preencha todos os campos!");
+            return;
+        }
+        setUser({ email, password, name, image });
         setLoading(true);
         setDisabled(true);
-        const user = { email, image, name, password };
-        const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', user);
+        const newUser = { email, image, name, password };
+        const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', newUser);
         promise.then(() => {
             navigate('/');
             setLoading(false);
-            setDisabled(false);
+            setDisabled(false);            
         });
         promise.catch(err => {
             console.log(err.response.data)

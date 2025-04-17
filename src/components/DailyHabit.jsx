@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 
-export default function DailyHabit ({habit}) {    
+export default function DailyHabit ({habit, updateHabits}) {    
     const [selected, setSelected] = useState(habit.done);
 
     function habitCheck() {
@@ -17,7 +17,10 @@ export default function DailyHabit ({habit}) {
         
         const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/${selected ? "uncheck" : "check"}`;
         const promise = axios.post(url, {}, config);
-        promise.then(() => setSelected(!selected));
+        promise.then(() => {
+            setSelected(!selected);
+            updateHabits();
+        });
         promise.catch((error) => console.log(error.response.data));
     }
 

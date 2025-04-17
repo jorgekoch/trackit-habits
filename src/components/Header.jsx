@@ -1,10 +1,14 @@
 import styled from "styled-components";
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
 
 export default function Header() {
+    const [user, setUser] = useContext(UserContext);
+    
     return (
         <HeaderContainer>
             <h1>TrackIt</h1>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Cathartes_aura_-Florida_-USA_-upper_body-8.jpg/220px-Cathartes_aura_-Florida_-USA_-upper_body-8.jpg" alt="photo" />
+            <img src={user.image} alt="photo" />
         </HeaderContainer>
     )
 }
@@ -14,11 +18,13 @@ const HeaderContainer = styled.div`
     flex-direction: row;
     align-items:center;
     justify-content: space-between;
-    min-width: 375px;
+    min-width: 100%;
     height: 75px;
     background-color: #126BA5;
     padding: 10px;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
     h1 {
         font-family: Playball;
         font-weight: 400;

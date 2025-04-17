@@ -20,6 +20,10 @@ export default function Today() {
     const dataFormatada = date.toLocaleDateString('pt-BR', opcoesFormatacao);
 
     useEffect(() => {
+        updateHabits();
+    }, []);
+
+    function updateHabits() {
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/");
@@ -33,7 +37,7 @@ export default function Today() {
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
         .then(response => setHabits(response.data))
         .catch(error => console.log(error.response.data));
-    }, []);
+    }
 
     return (
         <Body>
@@ -46,6 +50,7 @@ export default function Today() {
                     <DailyHabit
                     key={habit.id} 
                     habit={habit} 
+                    updateHabits={updateHabits}
                     />
                 ))}
             </MyHabits>
@@ -60,6 +65,8 @@ const Body = styled.div`
     min-width: 100%;
     min-height: 100vh;
     background-color: #f2f2f2;
+    position: relative;
+    top: 75px;
 `
 
 const Titles = styled.div`

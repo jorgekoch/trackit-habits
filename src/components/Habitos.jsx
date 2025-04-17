@@ -58,6 +58,8 @@ const Body = styled.div`
     width: 100%;
     min-height: 100vh;
     background-color: #f2f2f2;
+    position: relative;
+    top: 75px;
 `
 
 const Titles = styled.div`
