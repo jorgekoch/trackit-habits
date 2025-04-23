@@ -8,14 +8,14 @@ import BouncingDotsLoader from "./BouncingDotsLoader";
 import UserContext from '../context/UserContext';
 
 
-export default function Home () {
+export default function LogIn () {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false); 
-    const [user, setUser] = useState(UserContext);
-
+    const [user, setUser] = useContext(UserContext);
+    
     function logIn(e) {
         e.preventDefault();
         setLoading(true);
@@ -28,10 +28,12 @@ export default function Home () {
         }
         
         
-        const user = { email, password }; 
-        const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', user);
+        const users = { email, password }; 
+        const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', users);
         promise.then((response) => {
             localStorage.setItem("token", response.data.token);
+            setUser(response.data);
+            console.log(response.data);
             navigate('/habitos');
             setLoading(false);
             setDisabled(false);

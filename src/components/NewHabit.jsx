@@ -2,7 +2,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import axios from "axios"
 
-export default function NewHabit({ showForm, setShowForm }) {
+export default function NewHabit({ showForm, setShowForm, updateHabits }) {
     const [diasSelecionados, setDiasSelecionados] = useState([]);
     const [nomeHabito, setNomeHabito] = useState("");
 
@@ -26,10 +26,11 @@ export default function NewHabit({ showForm, setShowForm }) {
         const url = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
         const promise = axios.post(url, novoHabito, config);
         promise.then(() => console.log("ok"));
+            updateHabits();
         promise.catch(() => console.log("erro"));
-        setShowForm(false);
-        setDiasSelecionados([]);
-        setNomeHabito("");
+            setShowForm(false);
+            setDiasSelecionados([]);
+            setNomeHabito("");
     }
 
     const dias = [

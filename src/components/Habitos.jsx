@@ -7,13 +7,16 @@ import Header from "./Header";
 import Footer from "./Footer";
 import NewHabit from "./NewHabit";
 import Habit from "./Habit";
+import UserContext from "../context/UserContext";
+import { useContext } from "react";
 
 export default function Habitos() {
     const [showForm, setShowForm] = useState(false);
     const [habits, setHabits] = useState([]);
     const navigate = useNavigate();
+    const [user, setUser] = useContext(UserContext);
 
-    useEffect(() => {
+    function updateHabits() {
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/");
@@ -28,6 +31,10 @@ export default function Habitos() {
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
         .then(response => setHabits(response.data))
         .catch(error => console.log(error.response.data));
+    }
+
+    useEffect(() => {
+        updateHabits();
     }, []);
     
     return (
@@ -40,7 +47,7 @@ export default function Habitos() {
                 </button>
             </Titles>
             <MyHabits>
-                <NewHabit showForm={showForm} setShowForm={setShowForm}/>
+                <NewHabit showForm={showForm} setShowForm={setShowForm} updateHabits={updateHabits}/>
                 {habits.map((habit) => (
                     <Habit key={habit.id} habit={habit} />
                 ))}

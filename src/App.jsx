@@ -1,4 +1,4 @@
-import Home from "./components/Home";
+import LogIn from "./components/LogIn";
 import Signup from "./components/Signup";
 import Habitos from "./components/Habitos";
 import Today from "./components/Today";
@@ -9,7 +9,6 @@ import { useState } from "react";
 export default function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
-  console.log(user);
 
   return (
     <>
@@ -17,7 +16,7 @@ export default function App() {
         <UserContext.Provider value={[token, setToken]}>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<LogIn />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/habitos" element={<Habitos />} />
               <Route path="/hoje" element={<Today />} />

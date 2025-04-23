@@ -6,10 +6,12 @@ import axios from "axios";
 import Header from "./Header";
 import FooterToday from "./FooterToday";
 import DailyHabit from "./DailyHabit";
+import UserContext from "../context/UserContext";
+import { useContext } from "react";
 
 
 export default function Today() {
-
+    const [user, setUser] = useContext(UserContext);
     const [habits, setHabits] = useState([]);
     const navigate = useNavigate();
     const date = new Date();
